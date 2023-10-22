@@ -1,8 +1,9 @@
 #pragma once
 
-#include "postal-code.hpp"
+#include<string>
+#include "postal-code.cpp"
 
-namespace CppERP
+namespace kient::CppERP::core::utils
 {
     class Address
     {

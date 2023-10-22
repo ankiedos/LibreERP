@@ -1,12 +1,16 @@
 #pragma once
 
-namespace CppERP
+#include<string>
+
+
+namespace kient::CppERP::core::utils
 {
     class EMail
     {
         std::string user_;
         std::string domain_;
     public:
+        EMail() = default;
         explicit EMail(const std::string& user,
                        const std::string& domain)
         : user_{user}, domain_{domain} {}
