@@ -3,7 +3,7 @@
 #include<string>
 #include<mutex>
 
-#include "utils/address.cpp"
+#include "address.cpp"
 #include "utils/e-mail.cpp"
 #include "utils/macros.hpp"
 
@@ -87,6 +87,19 @@ namespace kient::CppERP::core
           address_ID_{address},
           email_ID_{email},
           role_{role} {}
+        User(const User& other)
+        {
+            std::lock_guard<std::mutex> lock{mutex};
+            ID_ = other.ID_;
+            name_ = other.name_;
+            second_name_ = other.second_name_;
+            surname_ = other.surname_;
+            gender_ = other.gender_;
+            password_hash_ = other.password_hash_;
+            address_ID_ = other.address_ID_;
+            email_ID_ = other.email_ID_;
+            role_ = other.role_;
+        }
 
         API_FLUENT_PROPERTY(ID, std::size_t, User)
         API_FLUENT_PROPERTY(name, std::string, User)

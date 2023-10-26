@@ -40,7 +40,7 @@ namespace kient::CppERP::core
         virtual Derived& limit(std::size_t lim) = 0;
         virtual T operator [](std::size_t idx) const
         {
-            return elements.at(idx);
+            return elements->at(idx);
         }
         template<typename U>
         static std::string filter_requirements(const std::string& field, const std::vector<U>& values)
