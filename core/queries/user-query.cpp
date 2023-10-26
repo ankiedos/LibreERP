@@ -3,22 +3,46 @@
 #include<vector>
 #include<algorithm>
 
-#include "repos/user-repository.cpp"
+#include "models/user.cpp"
+#include "repos/irepository.cpp"
 
 namespace kient::CppERP::core
 {
+    class UserRepository;
     class UserQuery
     {
-        std::string where = "";
+        std::string where_ = "";
         std::vector<std::size_t> view;
         pqxx::connection* db;
     public:
         UserQuery() = default;
         UserQuery(const UserQuery& other)
         {
-            where = other.where;
+            where_ = other.where_;
             view = other.view;
             db = other.db;
+        }
+        UserQuery& where(const std::string& new_where)
+        {
+            where_ = new_where;
+            return *this;
+        }
+        std::string where() const { return where_; }
+        UserQuery& append_where(const std::string& further)
+        {
+            if(where_ == "")
+            {
+                where_ = further;
+            }
+            else if(where_.find(" AND ") == std::string::npos)
+            {
+                where_ = "(" + where_ + ") AND (" + further + ")";
+            }
+            else
+            {
+                where_ = where_ + " AND (" + further + ")";
+            }
+            return *this;
         }
         UserQuery& add(std::size_t ID)
         {
@@ -29,7 +53,7 @@ namespace kient::CppERP::core
         {
             return std::find(view.begin(), view.end(), user.get_ID()) != view.end();
         }
-        UserQuery& initialise_from_pq_result(const pqxx::result& r) const
+        UserQuery initialise_from_pq_result(const pqxx::result& r) const
         {
             UserQuery results;
             for(std::size_t i = 0; i < r.size(); i++)
@@ -39,38 +63,28 @@ namespace kient::CppERP::core
             return results;
         }
         template<typename T>
-        UserQuery& filter(const std::string& row_name, const std::vector<T>& values) const
+        UserQuery filter(const std::string& row_name, const std::vector<T>& values) const
         {
             UserQuery results;
-            pqxx::work work{*(repo->db)};
-            std::string sql = UserRepository::filter_base;
-            auto new_where = UserRepository::filter_requirements(row_name, values);
-            if(where == "") sql += new_where;
-            else if(where.find(" AND ") == std::string::npos)
+            pqxx::work work{*db};
+            std::string sql = IRepository<User, UserQuery, UserRepository>::filter_base("users");
+            auto new_where = IRepository<User, UserQuery, UserRepository>::filter_requirements(row_name, values);
+            if(where_ == "") sql += new_where;
+            else if(where_.find(" AND ") == std::string::npos)
             {
-                sql += "(" + where + ") AND (" + new_where + ");";
+                sql += "(" + where_ + ") AND (" + new_where + ");";
             }
             else
             {
-                sql += where + " AND (" + new_where + ");";
+                sql += where_ + " AND (" + new_where + ");";
             }
             pqxx::result r = work.exec(sql);
             work.commit();
 
             results = initialise_from_pq_result(r);
 
-            if(where == "")
-            {
-                results.where = new_where;
-            }
-            else if(where.find(" AND ") == std::string::npos)
-            {
-                results.where = "(" + results.where + ") AND (" + new_where + ")";
-            }
-            else
-            {
-                results.where = where + " AND (" + new_where + ")";
-            }
+            results.where_ = where_;
+            results.append_where(new_where);
 
             return results;
         }

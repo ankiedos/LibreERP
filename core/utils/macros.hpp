@@ -10,11 +10,13 @@
 #define API_FLUENT_GETTER(metd, name, type)\
 type get_##metd() const\
 {\
+    std::lock_guard<std::mutex> lock{mutex};\
     return name;\
 }
 #define API_FLUENT_SETTER(metd, name, type, cltype)\
 cltype& set_##metd (const type& new_##name)\
 {\
+    std::lock_guard<std::mutex> lock{mutex};\
     name##_ = new_##name;\
     return *this;\
 }
@@ -38,12 +40,12 @@ API_FLUENT_GETTER(name, name##_, type)
 // }
 
 #define ORM_FILTER_BY(filter_name, field, type, query_t)\
-query_t& by_##filter_name(const std::vector<type>& filter_name##s)\
+query_t by_##filter_name(const std::vector<type>& filter_name##s)\
 {\
     return filter(#field, filter_name##s);\
 }
 #define ORM_FILTER_BY_ADAPTED(filter_name, field, type, query_t, adapt_t, adapter)\
-query_t& by_##filter_name(const std::vector<type>& filter_name##s)\
+query_t by_##filter_name(const std::vector<type>& filter_name##s)\
 {\
     std::vector<adapt_t> adaptation;\
     for(auto& el : filter_name##s)\
@@ -57,11 +59,11 @@ query_t& by_##filter_name(const std::vector<type>& filter_name##s)\
 repo_t& update_##method_name(const query_t& query, const type& method_name)\
 {\
     update(query, #field, method_name);\
-    for(auto& user : elements)\
+    for(std::size_t i = 0; i < elements->size(); i++)\
     {\
-        if(query.contains(user))\
+        if(query.contains((*elements)[i]))\
         {\
-            user.set_##method_name(method_name);\
+            (*elements)[i].set_##method_name(method_name);\
         }\
     }\
     return *this;\
@@ -70,11 +72,11 @@ repo_t& update_##method_name(const query_t& query, const type& method_name)\
 repo_t& update_##method_name(const query_t& query, const type& method_name)\
 {\
     update(query, #field, adapter(method_name));\
-    for(auto& user : elements)\
+    for(std::size_t i = 0; i < elements->size(); i++)\
     {\
-        if(query.contains(user))\
+        if(query.contains((*elements)[i]))\
         {\
-            user.set_##method_name(method_name);\
+            (*elements)[i].set_##method_name(method_name);\
         }\
     }\
     return *this;\

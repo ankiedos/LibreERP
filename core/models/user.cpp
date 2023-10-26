@@ -1,6 +1,7 @@
 #pragma once
 
 #include<string>
+#include<mutex>
 
 #include "utils/address.cpp"
 #include "utils/e-mail.cpp"
@@ -20,9 +21,20 @@ namespace kient::CppERP::core
         default: return 3; // unreachable
         }
     }
+    Gender gender_from_id(std::size_t id)
+    {
+        switch(id)
+        {
+        case 0: return Gender::Male;
+        case 1: return Gender::Female;
+        case 2: return Gender::Unknown;
+        default: return Gender::Unknown;
+        }
+    }
 
     class User
     {
+        mutable std::mutex mutex;
         static std::size_t next_ID_;
         API_DATA std::size_t ID_;
         std::string name_;
