@@ -1,6 +1,7 @@
 #pragma once
 
 #include<exception>
+#include<mutex>
 #include<pqxx/pqxx>
 
 #include "models/user.cpp"
@@ -32,7 +33,7 @@ namespace kient::CppERP::core
     class UserRepository : public IRepository<User, UserQuery, UserRepository>
     {
         pqxx::connection* db;
-        UserQuery& initialise_from_pq_result(const pqxx::result& r) const
+        UserQuery initialise_from_pq_result(const pqxx::result& r) const
         {
             UserQuery results;
             for(std::size_t i = 0; i < r.size(); i++)
@@ -50,11 +51,11 @@ namespace kient::CppERP::core
                     .set_name(r[i][1].as<std::string>())
                     .set_second_name(r[i][2].as<std::string>())
                     .set_surname(r[i][3].as<std::string>())
-                    .set_gender(r[i][4].as<Gender>())
+                    .set_gender(gender_from_id(r[i][4].as<std::size_t>()))
                     .set_address_ID(r[i][5].as<std::size_t>())
                     .set_email_ID(r[i][6].as<std::size_t>())
                     .set_role(r[i][7].as<std::string>());
-                elements.push_back(user);
+                elements->push_back(user);
             }
         }
     public:
@@ -70,46 +71,30 @@ namespace kient::CppERP::core
         void update(const UserQuery& query, const std::string& row_name, const T& value)
         {
             pqxx::work work{*db};
-            std::string sql = UserRepository::update_base;
-            auto where = query.where;
-            sql += UserRepository::column_value_pair(row_name, pqxx::to_string(value));
+            std::string sql = IRepository<User, UserQuery, UserRepository>::update_base("users");
+            auto where = query.where();
+            sql += IRepository<User, UserQuery, UserRepository>::column_value_pair(row_name, pqxx::to_string(value));
             sql += where + ";";
             pqxx::result r = work.exec(sql);
             work.commit();
-            if(r.affected_rows() == 0) throw UserRepositoryUpdateException(row_name);
+            if(r.affected_rows() == 0) throw UserRepositoryUpdateException(row_name.c_str());
         }
-        static const std::string filter_base;
-        static const std::string insert_base;
-        static const std::string update_base;
-        static std::string column_value_pair(const std::string& field, const std::string& value)
-        {
-            return field + " = " + value;
-        }
-        template<typename T>
-        static std::string filter_requirements(const std::string& field, const std::vector<T>& values)
-        {
-            utils::GlueableStringVector vec;
-            for(auto& str : values)
-            {
-                vec.push_back(column_value_pair(field, pqxx::to_string(str)));
-            }
-            return vec.glue(" OR ");
-        }
+
         UserRepository() = default;
         ~UserRepository() override = default;
         template<typename T>
-        UserQuery& filter(const std::string& row_name, const std::vector<T>& values) const
+        UserQuery filter(const std::string& row_name, const std::vector<T>& values) const
         {
-            UserQuery results{all};
+            UserQuery results{all_elements};
             pqxx::work work{*db};
-            std::string sql = UserRepository::filter_base;
-            auto where = UserRepository::filter_requirements(row_name, values);
+            std::string sql = IRepository<User, UserQuery, UserRepository>::filter_base("users");
+            auto where = IRepository<User, UserQuery, UserRepository>::filter_requirements(row_name, values);
             sql += where + ";";
             pqxx::result r = work.exec(sql);
             work.commit();
 
             results = initialise_from_pq_result(r);
-            results.where = where;
+            results.where(where);
             return results;
         }
         void refresh()
@@ -128,7 +113,7 @@ namespace kient::CppERP::core
         UserRepository& insert(const User& user) override
         {
             pqxx::work work{*db};
-            std::string sql = UserRepository::insert_base;
+            std::string sql = IRepository::insert_base("users");
             sql += "VALUES ("
             + pqxx::to_string(user.get_ID())
             + pqxx::to_string(user.get_name())
@@ -143,7 +128,7 @@ namespace kient::CppERP::core
             pqxx::result r = work.exec(sql);
             work.commit();
             if(r.affected_rows() != 1) throw UserRepositoryInsertException("");
-            elements.push_back(user);
+            elements->push_back(user);
             return *this;
         }
         ORM_UPDATE(ID, id, std::size_t, UserRepository, UserQuery)
@@ -167,10 +152,7 @@ namespace kient::CppERP::core
         {}
         User operator [](std::size_t idx) const
         {
-            return elements.at(idx);
+            return elements->at(idx);
         }
     };
-    const std::string UserRepository::filter_base = "SELECT * FROM `users` WHERE ";
-    const std::string UserRepository::insert_base = "INSERT INTO `users` ";
-    const std::string UserRepository::insert_base = "UPDATE `users` SET ";
 }

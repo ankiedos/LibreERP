@@ -1,7 +1,11 @@
 #pragma once
 
+#include<string>
 #include<vector>
+#include<pqxx/pqxx>
 
+#include "utils/threaded-vector.cpp"
+#include "utils/glueable-string-vector.cpp"
 
 namespace kient::CppERP::core
 {
@@ -18,7 +22,7 @@ namespace kient::CppERP::core
     {
     protected:
         QueryT all_elements;
-        std::vector<T> elements;
+        utils::ThreadedVector<T>* elements;
     public:
         virtual ~IRepository() = 0;
 
@@ -38,5 +42,22 @@ namespace kient::CppERP::core
         {
             return elements.at(idx);
         }
+        template<typename U>
+        static std::string filter_requirements(const std::string& field, const std::vector<U>& values)
+        {
+            utils::GlueableStringVector vec;
+            for(auto& str : values)
+            {
+                vec.push_back(column_value_pair(field, pqxx::to_string(str)));
+            }
+            return vec.glue(" OR ");
+        }
+        static std::string column_value_pair(const std::string& field, const std::string& value)
+        {
+            return field + " = " + value;
+        }
+        static std::string filter_base(const std::string& table) { return "SELECT * FROM `" + table + "` WHERE "; }
+        static std::string insert_base(const std::string& table) { return "INSERT INTO `" + table + "` "; }
+        static std::string update_base(const std::string& table) { return "UPDATE `" + table + "` SET "; }
     };
 }

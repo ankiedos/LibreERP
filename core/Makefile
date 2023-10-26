@@ -6,6 +6,7 @@ build :
 	make -f core/utils/Makefile build
 	make -f core/models/Makefile build
 	make -f core/repos/Makefile build
+	make -f core/queries/Makefile build
 
 test : build-tests run-tests
 build-tests :
