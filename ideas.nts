@@ -1,0 +1,34 @@
+config.json:
+"site-name": "",
+"businesses": {
+    "default": "kirjat",
+    "list": [
+        {
+            "table-prefix": "kirjat_",
+            "full-name": "Wydawnictwo Kirjat",
+            "URL": "kirjat"
+        }
+    ]
+}
+
+on registering, password HAS to be repeated, but the repetition MAY BE NOT the same as the repeated
+stages of forms:
+form
+process-form
+after-form
+
+form login-worker login
+method post
+action /forms/process-login-worker.php
+after /forms/after-login-worker.php
+permitted all
+reqselect type account-type . .
+	query SELECT * FROM roles WHERE name <> 'customer';
+endselect
+reqinput login text user-e-mail . .
+reqinput name text worker's-name . login-name
+reqinput surname text worker's-surname . login-surname
+reqinput password password password . .
+reqinput worker-id number worker's-id . login-id
+submit login-submit . .
+redirect /dashboard
