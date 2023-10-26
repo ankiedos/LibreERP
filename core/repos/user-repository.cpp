@@ -41,7 +41,31 @@ namespace kient::CppERP::core
             }
             return results;
         }
+        void initialise_repository(const pqxx::result& r)
+        {
+            for(std::size_t i = 0; i < r.size(); i++)
+            {
+                User user;
+                user.set_ID(r[i][0].as<std::size_t>())
+                    .set_name(r[i][1].as<std::string>())
+                    .set_second_name(r[i][2].as<std::string>())
+                    .set_surname(r[i][3].as<std::string>())
+                    .set_gender(r[i][4].as<Gender>())
+                    .set_address_ID(r[i][5].as<std::size_t>())
+                    .set_email_ID(r[i][6].as<std::size_t>())
+                    .set_role(r[i][7].as<std::string>());
+                elements.push_back(user);
+            }
+        }
     public:
+        explicit UserRepository(pqxx::connection* conn)
+        : db{conn}
+        {
+            pqxx::work work{*db};
+            pqxx::result r = work.exec("SELECT * FROM `users`;");
+            work.commit();
+            initialise_repository(r);
+        }
         template<typename T>
         void update(const UserQuery& query, const std::string& row_name, const T& value)
         {

@@ -1,0 +1,4 @@
+if(modules.installed("market"))
+{
+    modules.get("market").onorder.push_back(trigger_pixel); // trigger_pixel takes one argument - the order ID
+}

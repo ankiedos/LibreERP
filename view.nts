@@ -1,0 +1,45 @@
+CSSSheet sheet;
+CSSClass container = sheet.class("container");
+CSSID title = sheet.id("title");
+CSSElement input_submit = sheet.selector("input[type=submit]");
+
+container.border_color("red");
+container.border_size("2px");
+// ...
+
+ClassicLayoutStyling styling;
+styling.header.font("black", 20pt, "IBM Plex Sans");
+styling.header.background(RGB(200, 2, 2));
+styling.main.font(RGB(200, 2, 2), 12pt, "System UI");
+styling.main.background("white");
+
+QickWebSite site;
+BlogFeedLayout
+- article
+- aside_post_list
+BlogPostLayout
+- header
+- subheader
+- main
+- related_posts
+- further_readings
+- footer
+AboutUsLayout
+- team (a table with images + names + descriptions; traits to manipulate: e.g. row size)
+ClassicLayout layout = site.register();
+layout.styling(styling);
+layout.title("Main page");
+layout.header_contains_title();
+layout.subheader("created: ");
+layout.main({dom::PlaintextNode{""}, dom::UnderlineNode{"important"}, dom::Anchor{.href = "#section"}});
+layout.footer(site.roadmap());
+server.respond(layout.compile().render());
+
+CppWebServer
+dom + CSSSheet
+QuickWebSite
+
+
+// e-Płatności
+// how to augment Raspberry Pi with external RAM and GPU
+// wielowątkowość w C++
