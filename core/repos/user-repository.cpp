@@ -11,22 +11,6 @@
 
 namespace kient::CppERP::core
 {
-    class UserRepositoryInsertException : public std::exception
-    {
-        const char* msg_;
-    public:
-        UserRepositoryInsertException(const char* msg)
-        : msg_{msg} {}
-        const char* what() const noexcept { return msg_; }
-    };
-    class UserRepositoryUpdateException : public std::exception
-    {
-        const char* msg_;
-    public:
-        UserRepositoryUpdateException(const char* msg)
-        : msg_{msg} {}
-        const char* what() const noexcept { return msg_; }
-    };
     // TODO: Make it thread-safe
     // TODO: Get rid of SQL queries when just selecting; for that goal, implement a threaded search algorithm searching (returns indexes of all elements meeting the criteria)
     // TODO: Use part of that as SQLQueryBuilder library
@@ -77,7 +61,7 @@ namespace kient::CppERP::core
             sql += where + ";";
             pqxx::result r = work.exec(sql);
             work.commit();
-            if(r.affected_rows() == 0) throw UserRepositoryUpdateException(row_name.c_str());
+            if(r.affected_rows() == 0) throw RepositoryUpdateException(row_name.c_str(), "users");
         }
 
         UserRepository() = default;
@@ -127,7 +111,7 @@ namespace kient::CppERP::core
             + ");";
             pqxx::result r = work.exec(sql);
             work.commit();
-            if(r.affected_rows() != 1) throw UserRepositoryInsertException("");
+            if(r.affected_rows() != 1) throw RepositoryInsertException("", "users");
             elements->push_back(user);
             return *this;
         }
@@ -138,6 +122,7 @@ namespace kient::CppERP::core
         ORM_UPDATE(password_hash, password_hash, std::string, UserRepository, UserQuery)
         ORM_UPDATE(address_ID, address_id, std::size_t, UserRepository, UserQuery)
         ORM_UPDATE(email_ID, email_id, std::size_t, UserRepository, UserQuery)
+        ORM_UPDATE(role, role, std::string, UserRepository, UserQuery)
         UserRepository& remove()
         {}
         UserRepository& sum()

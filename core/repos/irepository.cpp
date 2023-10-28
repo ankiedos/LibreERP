@@ -9,6 +9,24 @@
 
 namespace kient::CppERP::core
 {
+    class RepositoryInsertException : public std::exception
+    {
+        const char* msg_;
+        const char* table_;
+    public:
+        RepositoryInsertException(const char* msg, const char* table)
+        : msg_{msg}, table_{table} {}
+        const char* what() const noexcept { return (std::string{"Cannot insert a new entry "} + msg_ + " into the table `" + table_ + "`").c_str(); }
+    };
+    class RepositoryUpdateException : public std::exception
+    {
+        const char* msg_;
+        const char* table_;
+    public:
+        RepositoryUpdateException(const char* msg, const char* table)
+        : msg_{msg}, table_{table} {}
+        const char* what() const noexcept { return (std::string{"Cannot update the row "} + msg_ + " of the table `" + table_ + "`").c_str(); }
+    };
     /*
         User user("Antoni", "", "Kiedos", Gender::Male, "dei3ff38", address, email, "owner");
         UserRepository user_repo;
