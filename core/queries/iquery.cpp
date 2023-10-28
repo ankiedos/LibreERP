@@ -7,13 +7,13 @@
 
 namespace kient::CppERP::core
 {
-    template<typename T, typename RepoT, typename Derived>
+    template<typename T, typename IDT, typename RepoT, typename Derived>
     class IQuery
     {
     protected:
         std::string table_name_;
         std::string where_ = "";
-        std::vector<std::size_t> view;
+        std::vector<IDT> view;
         pqxx::connection* db;
     public:
         virtual ~IQuery() = default;
@@ -39,7 +39,7 @@ namespace kient::CppERP::core
             }
             return *this;
         }
-        Derived& add(std::size_t ID)
+        Derived& add(const IDT& ID)
         {
             view.push_back(ID);
             return *this;
@@ -53,7 +53,7 @@ namespace kient::CppERP::core
             Derived results;
             for(std::size_t i = 0; i < r.size(); i++)
             {
-                results.add(r[i][0].as<std::size_t>());
+                results.add(r[i][0].as<IDT>());
             }
             return results;
         }

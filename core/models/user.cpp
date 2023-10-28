@@ -36,15 +36,15 @@ namespace kient::CppERP::core
     {
         mutable std::mutex mutex;
         static std::size_t next_ID_;
-        API_DATA std::size_t ID_;
+        API_PRIMARY_KEY API_UNIQUE std::size_t ID_;
         std::string name_;
         std::string second_name_;
         std::string surname_;
         Gender gender_;
         std::string password_hash_;
-        std::size_t address_ID_;
-        std::size_t email_ID_;
-        std::string role_;
+        API_FOREIGN_KEY std::size_t address_ID_;
+        API_FOREIGN_KEY API_UNIQUE std::size_t email_ID_;
+        API_FOREIGN_KEY std::size_t role_ID_;
     public:
         static std::size_t next_ID()
         {
@@ -58,7 +58,7 @@ namespace kient::CppERP::core
                       const std::string& password_hash,
                       std::size_t address,
                       std::size_t email,
-                      const std::string& role)
+                      std::size_t role_ID)
         : ID_{User::next_ID()},
           name_{name},
           second_name_{second_name},
@@ -67,7 +67,7 @@ namespace kient::CppERP::core
           password_hash_{password_hash},
           address_ID_{address},
           email_ID_{email},
-          role_{role} {}
+          role_ID_{role_ID} {}
 
         explicit User(std::size_t ID,
                       const std::string& name,
@@ -77,7 +77,7 @@ namespace kient::CppERP::core
                       const std::string& password_hash,
                       std::size_t address,
                       std::size_t email,
-                      const std::string& role)
+                      std::size_t role_ID)
         : ID_{ID},
           name_{name},
           second_name_{second_name},
@@ -86,7 +86,7 @@ namespace kient::CppERP::core
           password_hash_{password_hash},
           address_ID_{address},
           email_ID_{email},
-          role_{role} {}
+          role_ID_{role_ID} {}
 
         User(const User& other)
         {
@@ -99,7 +99,7 @@ namespace kient::CppERP::core
             password_hash_ = other.password_hash_;
             address_ID_ = other.address_ID_;
             email_ID_ = other.email_ID_;
-            role_ = other.role_;
+            role_ID_ = other.role_ID_;
         }
 
         API_FLUENT_PROPERTY(ID, std::size_t, User)
@@ -110,7 +110,7 @@ namespace kient::CppERP::core
         API_FLUENT_PROPERTY(password_hash, std::string, User)
         API_FLUENT_PROPERTY(address_ID, std::size_t, User)
         API_FLUENT_PROPERTY(email_ID, std::size_t, User)
-        API_FLUENT_PROPERTY(role, std::string, User)
+        API_FLUENT_PROPERTY(role_ID, std::size_t, User)
     };
     std::size_t User::next_ID_ = 1;
 }

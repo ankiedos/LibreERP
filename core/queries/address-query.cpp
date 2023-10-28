@@ -10,7 +10,7 @@
 namespace kient::CppERP::core
 {
     class AddressRepository;
-    class AddressQuery : public IQuery<Address, AddressRepository, AddressQuery>
+    class AddressQuery : public IQuery<Address, std::size_t, AddressRepository, AddressQuery>
     {
         std::string table_name_ = "addresses";
         std::string where_ = "";

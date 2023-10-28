@@ -38,7 +38,7 @@ namespace kient::CppERP::core
                     .set_gender(gender_from_id(r[i][4].as<std::size_t>()))
                     .set_address_ID(r[i][5].as<std::size_t>())
                     .set_email_ID(r[i][6].as<std::size_t>())
-                    .set_role(r[i][7].as<std::string>());
+                    .set_role_ID(r[i][7].as<std::size_t>());
                 elements->push_back(user);
             }
         }
@@ -107,7 +107,7 @@ namespace kient::CppERP::core
             + pqxx::to_string(user.get_password_hash())
             + pqxx::to_string(user.get_address_ID())
             + pqxx::to_string(user.get_email_ID())
-            + pqxx::to_string(user.get_role())
+            + pqxx::to_string(user.get_role_ID())
             + ");";
             pqxx::result r = work.exec(sql);
             work.commit();
@@ -122,7 +122,7 @@ namespace kient::CppERP::core
         ORM_UPDATE(password_hash, password_hash, std::string, UserRepository, UserQuery)
         ORM_UPDATE(address_ID, address_id, std::size_t, UserRepository, UserQuery)
         ORM_UPDATE(email_ID, email_id, std::size_t, UserRepository, UserQuery)
-        ORM_UPDATE(role, role, std::string, UserRepository, UserQuery)
+        ORM_UPDATE(role_ID, role_ID, std::size_t, UserRepository, UserQuery)
         UserRepository& remove()
         {}
         UserRepository& sum()
