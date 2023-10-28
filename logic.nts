@@ -1,4 +1,15 @@
 if(modules.installed("market"))
 {
-    modules.get("market").onorder.push_back(trigger_pixel); // trigger_pixel takes one argument - the order ID
+    modules.get("market").on("order") += trigger_pixel; // trigger_pixel takes one argument - the order ID
 }
+/*
+template<typename T>
+event<T>& on(const std::string& ev_name)
+{
+    if(ev_name == "order")
+    {
+        return onorder;
+    }
+}
+event<std::size_t> onorder;
+*/

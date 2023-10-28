@@ -87,6 +87,7 @@ namespace kient::CppERP::core
           address_ID_{address},
           email_ID_{email},
           role_{role} {}
+
         User(const User& other)
         {
             std::lock_guard<std::mutex> lock{mutex};
