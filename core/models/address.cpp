@@ -11,7 +11,7 @@ namespace kient::CppERP::core
     {
         mutable std::mutex mutex;
         static std::size_t next_ID_;
-        API_DATA std::size_t ID_;
+        API_PRIMARY_KEY API_UNIQUE std::size_t ID_;
         std::string country_;
         std::string region_;
         std::string city_;

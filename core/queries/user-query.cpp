@@ -10,7 +10,7 @@
 namespace kient::CppERP::core
 {
     class UserRepository;
-    class UserQuery : public IQuery<User, UserRepository, UserQuery>
+    class UserQuery : public IQuery<User, std::size_t, UserRepository, UserQuery>
     {
         std::string table_name_ = "users";
         std::string where_ = "";

@@ -3,6 +3,7 @@
 
 #define API_PRIMARY_KEY
 #define API_FOREIGN_KEY
+#define API_UNIQUE
 #define API_DATA
 #define API_SINK
 
