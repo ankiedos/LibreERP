@@ -1,0 +1,201 @@
+notify:
+S:
+{
+    "message": "notify",
+    "data": {
+        "mod": <mod_id>,
+        "msg": "<msg>"
+    }
+}
+
+sendform:
+C:
+{
+    "message": "sendform",
+    "data": {
+        "mod": <mod_id>,
+        "form": <form_id>,
+        "data": {<form_data>}
+    }
+}
+
+sendform user-login:
+"data": {
+    "role": "core:owner",
+    "id": 103123,
+    "name": "Antoni",
+    "surname": "Kiedos",
+    "password": "passw"
+}
+
+sendform user-register:
+"data": {
+    "role": "core:owner",
+    "name": "Antoni",
+    "second-name": "",
+    "surname": "Kiedos",
+    "password": "passw",
+    "gender": "M"
+}
+
+sendform mod-install:
+"data": {
+    "mod-id": <mod_id>
+}
+
+sendform mod-uninstall:
+"data": {
+    "mod-id": <mod_id>
+}
+
+sendform mod-manage:
+"data": {
+    "oper": "list",
+    "tags": [<tags...>]
+}
+
+"data": {
+    "oper": "search",
+    "tags": [<tags...>],
+    "phrase": "<phrase>"
+}
+
+sendform template-create:
+"data": {
+    <template JSON>
+}
+
+sendform product-manage:
+"data": {
+    "oper": "create",
+    "type": "[article | service]",
+    "name": {
+        "<langcode>": "<name>",
+        ...
+    },
+    "description": {
+        "<langcode>": "<descr>",
+        ...
+    },
+    "images": {
+        "<langcode>": [{
+                    "fname": "<file name>",
+                    "format": "<file format>",
+                    "data": "<bytes...>"
+                },
+                ...
+            ],
+        ...
+    },
+    "pricing": {
+        "retail": {
+            "<currency>": [<price>, <margin>],
+            ...
+        },
+        "b2b": {
+            "<currency>": [[
+                <minimum-qty>, <maximum-qty>, <price>, <margin>
+            ], ...],
+            ...
+        }
+    },
+    "units-left": <units left>,
+    "unit": "<unit>",
+    "categories": {
+        "<langcode>": ["<category>", ...],
+        ...
+    },
+    "reason": "<reason why>"
+}
+
+"data": {
+    "oper": "delete",
+    "id": <product-id>,
+    "reason": "<reason why>",
+    "delete-images": [true | false]
+}
+
+"data": {
+    "oper": "archive",
+    "id": <product-id>,
+    "reason": "<reason why>"
+}
+
+"data": {
+    "oper": "modify",
+    "id": <product-id>,
+    "new": {
+        ...
+    },
+    "reason": "<reason why>"
+}
+
+sendform product-search:
+"data": {
+    "id": <product-id>,
+    "date-added-min": "<minimal date the product was added>",
+    "date-added-max": "<maximal date the product was added>",
+    "type": "[article | service]",
+    "name": "<name>",
+    "description": "<descr>",
+    "pricing": {
+        "retail-min": <minimal retail price>,
+        "retail-max": <maximal retail price>,
+        "b2b-min": <minimal B2B price>,
+        "b2b-max": <maximal B2B price>
+    },
+    "units-left-min": <minimal number of units>,
+    "units-left-max": <maximal number of units>,
+    "unit": "<unit>"
+    "categories": ["<category>", ...]
+}
+
+sendform category-manage:
+"data": {
+    "oper": "create",
+    "name": {
+        "<langcode>": "<name>",
+        ...
+    },
+    "description": {
+        "<langcode>": "<descr>",
+        ...
+    },
+    "images": {
+        "<langcode>": [{
+                "fname": "<file name>",
+                "format": "<file format>",
+                "data": "<bytes...>"
+            },
+            ...
+        ],
+        ...
+    },
+    "categories": {
+        "<langcode>": ["<category>", ...],
+        ...
+    },
+    "reason": "<reason why>"
+}
+
+"data": {
+    "oper": "delete",
+    "id": <product-id>,
+    "reason": "<reason why>",
+    "delete-images": [true | false]
+}
+
+"data": {
+    "oper": "archive",
+    "id": <product-id>,
+    "reason": "<reason why>"
+}
+
+"data": {
+    "oper": "modify",
+    "id": <product-id>,
+    "new": {
+        ...
+    },
+    "reason": "<reason why>"
+}
