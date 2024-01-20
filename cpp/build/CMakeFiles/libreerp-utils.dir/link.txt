@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblibreerp-utils.a CMakeFiles/libreerp-utils.dir/lib/src/db.cpp.o
-/usr/bin/ranlib liblibreerp-utils.a

@@ -1,1 +1,0 @@
-g++ CMakeFiles/libreerp.dir/src/main.cpp.o -o libreerp  liblibreerp-utils.a /usr/lib/x86_64-linux-gnu/libsoci_core.so /usr/lib/x86_64-linux-gnu/libsoci_mysql.so /usr/lib/x86_64-linux-gnu/libdl.a /usr/lib/x86_64-linux-gnu/libmysqlclient.so 
