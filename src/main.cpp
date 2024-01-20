@@ -40,11 +40,11 @@ int main(int argc, char** argv)
 
     sql::Table global_config;
     global_config.name = "global_config";
-    sql::Table global_businesses;
-    global_businesses.name = "global_businesses";
-    sql::Table global_default_business;
-    global_default_business.name = "global_default_business";
-    sql::Table modules;
+    // sql::Table global_businesses;
+    // global_businesses.name = "global_businesses";
+    // sql::Table global_default_business;
+    // global_default_business.name = "global_default_business";
+    sql::Table global_modules = "global_modules";
 
     std::vector<kient::lerp::modul> modules;
     db_conn_data cdata;

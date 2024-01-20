@@ -32,7 +32,6 @@ struct business_config
     std::string full_name;
     std::string base_url;
 };
-std::vector<business_config> businesses;
 struct server_config
 {
     std::string domain;

@@ -121,7 +121,6 @@ struct modul
 namespace modules
 {
     std::map<std::string, std::vector<modul>> mods;
-    std::size_t by_url(const std::string& URL);
 }
 }
 #endif
