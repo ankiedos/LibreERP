@@ -1,7 +1,8 @@
 1. core:
 - tabela z kontrahentami biznesowymi (dostępna tylko wewnętrznie; zawiera tylko tych, którzy nie są użytkownikami)
 - tabela z kontaktami
-- tabela z użytkownikami
+- tabela z klientami
+- tabela z pracownikami
 - tabela z adresami
 - tabela z rolami
 - tabela z modułami

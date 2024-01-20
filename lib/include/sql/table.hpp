@@ -1,7 +1,9 @@
 #ifndef KIENT_LIBREERP_UTILS_SQL_TABLE_HPP
 #define KIENT_LIBREERP_UTILS_SQL_TABLE_HPP
 
+#include<memory>
 #include<string>
+#include<soci/mysql/soci-mysql.h>
 #include "select.hpp"
 #include "update.hpp"
 #include "insert.hpp"
@@ -14,6 +16,7 @@ namespace kient::lerp::sql
     struct Table
     {
         std::string name;
+        std::shared_ptr<soci::session> db;
         virtual Select& select();
         virtual Update& update();
         virtual Insert& insert();

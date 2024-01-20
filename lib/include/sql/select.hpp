@@ -1,9 +1,11 @@
 #ifndef KIENT_LIBREERP_UTILS_SQL_SELECT_HPP
 #define KIENT_LIBREERP_UTILS_SQL_SELECT_HPP
 
+#include<memory>
 #include<map>
 #include<string>
 #include<vector>
+#include<soci/mysql/soci-mysql.h>
 
 #include "statement.hpp"
 #include "cond.hpp"
@@ -12,6 +14,7 @@ namespace kient::lerp::sql
 {
     struct Select : public Statement
     {
+        std::shared_ptr<soci::session> db;
         std::string table;
         Cond cond;
         std::vector<std::string> queried_fields;
@@ -28,6 +31,7 @@ namespace kient::lerp::sql
         Select& add_field(const std::string& field);
 
         std::string to_str() const override;
+        soci::row exec() const override;
     };
 }
 

@@ -11,4 +11,9 @@ namespace kient::lerp::sql
     {
         return "DROP TABLE " + table_ + ";";
     }
+    soci::row Drop::exec() const
+    {
+        db << to_str();
+        return soci::row{};
+    }
 }

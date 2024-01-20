@@ -32,9 +32,3 @@ reqinput password password password . .
 reqinput worker-id number worker's-id . login-id
 submit login-submit . .
 redirect /dashboard
-
-
-
-Do silnika Emrys:
-gdt[] (Grand Delta Time), której wartości zwiększają się co ramę, bez resetowania, które jest przeprowadzane manualnie.
-Może być wykorzystywana np. do sprawdzenia, ile czasu minęło od ostatniego otwarcia skrzynki.

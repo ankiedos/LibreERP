@@ -16,19 +16,20 @@
 #include<soci/soci.h>
 #include<soci/mysql/soci-mysql.h>
 
-#include "sql/table.hpp"
+#include "db/server-config.hpp"
 
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "third-party/cpp-httplib/httplib.h"
 #include "typedefs.hpp"
 #include "state.hpp"
 #include "db.hpp"
+#include "module.hpp"
 
-soci::session db;
+soci::session datab;
 
 void shutdown_(int _)
 {
-    db.close();
+    datab.close();
 }
 
 int main(int argc, char** argv)
@@ -38,13 +39,13 @@ int main(int argc, char** argv)
     signal(SIGTERM, shutdown_);
     signal(SIGKILL, shutdown_);
 
-    sql::Table global_config;
-    global_config.name = "global_config";
+    db::ServerConfig srv_cfg;
     // sql::Table global_businesses;
     // global_businesses.name = "global_businesses";
     // sql::Table global_default_business;
     // global_default_business.name = "global_default_business";
-    sql::Table global_modules = "global_modules";
+    // sql::Table global_modules;
+    // global_modules.name = "global_modules";
 
     std::vector<kient::lerp::modul> modules;
     db_conn_data cdata;
@@ -54,15 +55,11 @@ int main(int argc, char** argv)
     cdata.db = "libreerp";
     cdata.port = 3306;
 
-    db_connect(db, cdata);
+    db_connect(datab, cdata);
     std::clog << "Successfully connected to the DB\n";
 
-    std::string site_name;
-    server_config srv_cfg;
-    db << global_config.select().add_field("*").to_str();
-    db_get_global_config(db, site_name, srv_cfg);
-
-    httplib::SSLServer server{srv_cfg.ssl_cert, srv_cfg.ssl_key};
+    auto conf = srv_cfg.get_all();
+    httplib::SSLServer server{conf.ssl_cert.c_str(), conf.ssl_key.c_str()};
     server.Get("/dashboard", [](const httplib::Request& req, httplib::Response& res)
     {
         res.set_content("", "text/html");
@@ -74,7 +71,7 @@ int main(int argc, char** argv)
         kient::lerp::modules::exec(kient::lerp::modules::mods[mod].name, kient::lerp::modules::mods[mod].proc_serve, req.matches[1]);
         res.set_content("", "");
     });
-    server.listen(srv_cfg.hostname, srv_cfg.port);
+    server.listen(conf.hostname, conf.port);
     std::clog << "Sent index.html\n";
 
     shutdown_(0);

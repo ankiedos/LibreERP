@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/include"
+                "${workspaceFolder}/lib/include",
+                "/usr/include/mysql" // SOCI is so old it #includes mysql.h instead of mysql/mysql.h
             ],
             "defines": [],
             "intelliSenseMode": "linux-clang-x64"

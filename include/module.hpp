@@ -120,7 +120,9 @@ struct modul
 };
 namespace modules
 {
-    std::map<std::string, std::vector<modul>> mods;
+    std::map<std::string, modul> mods;
+    template<typename First, typename ...Rest>
+    void exec(const std::string& modname, const std::string& procname, First& arg0, Rest... args);
 }
 }
 #endif

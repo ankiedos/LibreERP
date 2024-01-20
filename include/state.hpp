@@ -34,6 +34,7 @@ struct business_config
 };
 struct server_config
 {
+    std::string site_name;
     std::string domain;
     libreerp_mode_t mode;
     std::string ssl_cert, ssl_key;

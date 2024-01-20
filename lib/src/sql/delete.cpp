@@ -22,4 +22,9 @@ namespace kient::lerp::sql
         res += ";";
         return res;
     }
+    soci::row Delete::exec() const
+    {
+        db << to_str();
+        return soci::row{};
+    }
 }

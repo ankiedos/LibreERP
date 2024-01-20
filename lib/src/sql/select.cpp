@@ -79,4 +79,10 @@ namespace kient::lerp::sql
         res += ";";
         return res;
     }
+    soci::row Select::exec() const
+    {
+        soci::row r;
+        db << to_str(), into(r);
+        return r;
+    }
 }
