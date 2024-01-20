@@ -70,31 +70,10 @@ int main(int argc, char** argv)
     server.Get("/(.*)", [](const httplib::Request& req, httplib::Response& res)
     {
         std::string path = req.matches[1].str();
-        std::string bus;
-
-        auto end = path.find('/');
-        std::size_t modbeg;
-        auto it = std::find_if(businesses.begin(), businesses.end(), [path, end](auto b){ return b.base_url == path.substr(0, end); });
-
-        if(it == businesses.end())
-        {
-            modbeg = 0;
-            auto row = db_select(db, "*", "global_default_business");
-            row >> bus;
-        }
-        else
-        {
-            modbeg = end + 1;
-            bus = it->base_url;
-        }
-        auto mod = kient::lerp::modules::by_url(bus, path.substr(modbeg, path.find('/', modbeg)));
+        auto mod = path.substr(1, path.find('/', 1));
         kient::lerp::modules::exec(kient::lerp::modules::mods[mod].name, kient::lerp::modules::mods[mod].proc_serve, req.matches[1]);
         res.set_content("", "");
     });
-    server.Get("/(.*)", [](const httplib::Request& req, httplib::Response& res)
-    {
-        auto mod = modules
-    })
     server.listen(srv_cfg.hostname, srv_cfg.port);
     std::clog << "Sent index.html\n";
 
