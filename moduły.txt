@@ -1,0 +1,102 @@
+MODUŁY:
+
+W osobnej tabeli `global_theme` znajdują się modyfikowalne części styli
+np. `navbar_theme` to tabela ze stylami dla paska nawigacji
+W tabeli `user_config` dodatkowe pola z ID wybranych styli
+W tabeli `global_config` dodatkowe pola z ID wybranych styli
+W Panelu Administracyjnym zakładki do wizualnego edytowania styli:
+wyświetla się to, co ma być ostylowane, ale zamiast tekstu - input[type=text], oraz różne przyciski w ramach widoku do modyfikowania np. tła lub obramowania
+W module analytics, wykresy:
+- ile zostało do osiągnięcia celu (osiągnięty % + kwota do pozyskania)
+- wykres świecowy (min - med - max) z przychodami min, med i max dla dnia, tygodnia, miesiąca, kwartału, roku w danym przedziale czasowym
+- wykres świecowy (min - med - max) ze średnimi przychodami min, med i max dla dnia, tygodnia, miesiąca, kwartału, roku w danym przedziale czasowym
+- wykres słupkowy ze średnimi przychodami dla dnia, tygodnia, miesiąca, kwartału, roku w danym przedziale czasowym
+- wykres liniowy z przychodami w danym przedziale czasowym
+- wykres liniowy z leadami w danym przedziale czasowym
+		 z liczbą transakcji w danym przedziale czasowym
+		 ze skutecznością w danym przedziale czasowym
+- wykres liniowy ze średnią wartością transakcji dla dnia, tygodnia, miesiąca, kwartału, roku w danym przedziale czasowym
+
+core (workers, workpays, costs, permanent_assets, branches)
+core:helpers (economic_events_descriptions, contrahents, contranhents_addresses, contacts)
+
+logistics (internal_distributors, external_distributors, distribution_centres)
+
+market (market_invoices, market_orders, market_contracts, market_customers, market_products_and_services, market_categories)
+
+taxes:pl (taxes_pl_zus_branches, some data about taxes)
+taxes:<here_a_country_code>
+
+publishing (roles: publ:author, publ:reviewer, publ:editor)
+
+pricedown (pricedown_discounts, pricedown_promocodes, helpers: categories_products, promocode_args, discount_args, promocode_categories, promocode_products, discount_categories, discount_products)
+
+pr (pr_newsletter, pr_events, helpers: customers_events)
+
+forms (forms_submit_users, forms_submit_groups)
+
+payaddons (payaddons_bonuses, payaddons_benefits, payaddons_workers_states)
+
+mailer (db: mailer, tables: config, addresses, emails)
+instant_messengers:messenger
+instant_messengers:whatsapp
+mailer:helpdesk
+mailer:business_inquiries
+projects
+source_control:github
+source_control:gitlab
+source_control:git
+matrix_chat (services: matrix)
+loyality_program
+partnership_program (linki afiliacyjne itp.)
+
+WBUDOWANE MODUŁY:
+modules
+forms
+
+
+PRZYKŁADY:
+przykład ładowania modułu:
+module_t mod = modpath; // uses boost::dll
+modules::load(mod);
+
+przykład ładowania formularza:
+auto mod = forms::compile_form(new_form_path);
+modules::load(mod);
+
+przykład pobierania systemu płac pracownika (skompilowane):
+auto core = modules::get("core");
+auto benefits = modules::get("benefits");
+auto market = modules::get("market");
+
+auto paysys = core.paysystems["intdistr"][0];
+if(paysys->type == core.PAYSYS_TIMED)
+{
+    auto sick_wtus = core.all_workers.by_role("intdistr").by_ID(0).sick_leave_wtus_this_month;
+    if(benefits.get("sick").type == benefits.B_ABS)
+    {
+        auto earning = benefits.get("sick").value + paysys["monthly-wage"];
+    }
+    else if(benefits.get("sick").type == benefits.B_REL)
+    {
+        auto earning = (benefits.get("sick").value + 1) * paysys["monthly-wage"];
+    }
+    // ...
+}
+else if(paysys->type == core.PAYSYS_ACORD)
+{
+    auto norm = *paysys["norm"];
+    auto norm_type = *paysys["normtype"]; // piece/money
+    auto wage_for_norm = *paysys["normwage"];
+    auto unit_wage = *paysys["unitwage"];
+    auto wage_after_norm = *paysys["postnormwage"];
+    if(norm_type == core.PAYSYS_NORM_PIECE)
+    else if(norm_type == core.PAYSYS_NORM_MONEY);
+    // ...
+}
+else if(paysys->type == core.PAYSYS_PROVISIONAL)
+{
+    auto provision = *paysys["provision"];
+    auto earning = provision * market.get_orders_by_worker("intdistr", 0).realised().values().sum();
+    // ...
+}

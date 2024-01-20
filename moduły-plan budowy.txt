@@ -1,0 +1,53 @@
+1. core:
+- tabela z kontrahentami biznesowymi (dostępna tylko wewnętrznie; zawiera tylko tych, którzy nie są użytkownikami)
+- tabela z kontaktami
+- tabela z użytkownikami
+- tabela z adresami
+- tabela z rolami
+- tabela z modułami
+- formularz do rejestracji
+- formularz do logowania
+- formularz do instalacji modułów
+- formularz do deinstalacji modułów
+- formularz do zarządzania modułami
+
+2. static_webpages:
+- tabela ze statycznymi dokumentami HTML
+- tabela z szablonami (nazwa, wartości opcji..., treść z użyciem zmiennych poprzedzonych znakiem '$')
+- tabele z użyciami konkretnych szablonów (tj. np. tabela ...standard_template z polami page_id, title_header, style, title, header, main, footer)
+- formularz do tworzenia szablonów
+
+3. market: (później też dedykowane program desktopowy i aplikacja mobilna do zarządzania magazynem i zamówieniami)
+- tabela z zamówieniami
+- tabela z kontraktami
+- tabela z fakturami
+- tabela z produktami i usługami
+- tabela z kategoriami produktów i usług
+- formularz do dodawania/edycji/usunięcia towaru
+- formularz do wyszukiwania towarów po stronie przedsiębiorstwa
+- formularz do dodawania kategorii
+- formularz do tworzenia rodzajów produktów i rodzajów usług
+- formularz do dodawania kontraktów i faktur
+
+4. store: (później też dedykowana aplikacja mobilna po stronie kontrahenta do interakcji ze sklepem oraz po stronie przedsiębiorstwa do zarządzania nim)
+- widok z nowymi produktami
+- widok z bestsellerami
+- formularz do wyszukiwania towarów po stronie kontrahenta
+- formularz do składania zamówienia zdalnego po stronie kontrahenta
+- formularz do składania zamówienia stacjonarnego po stronie przedsiębiorstwa
+- formularz do składania zapytania ofertowego
+- formularz do składania reklamacji
+- formularz do rezerwacji określonej ilości danego towaru
+- formularz do składania próśb o powiadomienie, gdy dany towar będzie znów dostępny
+
+5. themes:
+
+5. forms:
+- tabela z kodem HTML formularzy
+- formularz do kompilacji i instalacji formularzy
+  - instalacja polega na:
+    - zapisaniu skompilowanego formularza do tabeli z kodem HTML formularzy
+    - gdy form:
+      * stworzeniu tabeli z wypełnionymi formularzami danego typu
+    - gdy autoform:
+      * stworzeniu tabeli archiwalnej z wypełnionymi formularzami danego typu

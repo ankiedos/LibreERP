@@ -1,0 +1,4 @@
+/home/ank/gitroot/cpp-erp/cpp/build/CMakeFiles/libreerp-utils.dir
+/home/ank/gitroot/cpp-erp/cpp/build/CMakeFiles/libreerp.dir
+/home/ank/gitroot/cpp-erp/cpp/build/CMakeFiles/edit_cache.dir
+/home/ank/gitroot/cpp-erp/cpp/build/CMakeFiles/rebuild_cache.dir
