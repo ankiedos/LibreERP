@@ -20,8 +20,4 @@ struct db_conn_data
 
 void db_connect(soci::session& db, const db_conn_data& data);
 
-soci::row db_select(const std::string& fields, const std::string& tbl, const std::string& where);
-
-void db_get_global_config(soci::session& db, std::string& site_name, server_config& srv_cfg);
-
 #endif

@@ -40,7 +40,7 @@ sendform user-register:
 
 sendform mod-install:
 "data": {
-    "mod-id": <mod_id>
+    "mod-id": <mod_URL>
 }
 
 sendform mod-uninstall:

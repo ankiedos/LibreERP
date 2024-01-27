@@ -2,6 +2,9 @@
 #define KIENT_LIBREERP_UTILS_DB_SERVERCONFIG_HPP
 
 #include<memory>
+
+#include<soci/mysql/soci-mysql.h>
+
 #include "sql/table.hpp"
 #include "state.hpp"
 
